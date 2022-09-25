@@ -51,7 +51,6 @@ Compile the Java application and build the Docker image containing it with the M
 
  ```
  mvn compile jib:dockerBuild
-
  ```
 
 Apply the `dojo-crd` Custom Resource Definition to the cluster 
@@ -65,14 +64,12 @@ Deploy the operator to the cluster with the `operator.yaml` manifest
  ```
  kubectl apply -f manifests/operator.yaml 
  ```
- ```
 
 You can verify the successful deployment by checking if the pod is running in kubernetes and inspecting the logs 
 
  ```
  kubectl get pods -n sample
  kubectl logs deployment.apps/operator-deployment -n sample
-
  ```
 
 Apply the `Dojo` custom resource to the Kubernetes cluster
@@ -80,14 +77,12 @@ Apply the `Dojo` custom resource to the Kubernetes cluster
  ```
  kubectl apply -f manifests/dojo.yaml 
  ```
- ```
 
 ## Testing the operator
  Log into the operator deployment pod
 
  ```
  kubectl exec -it $(kubectl get pods -n sample -o name | grep pod/operator-deployment-) -n sample /bin/bash
-
  ```
 
  Check the initial status of the python service by opening a terminal and sending a `GET` request with `curl`
@@ -96,7 +91,6 @@ Apply the `Dojo` custom resource to the Kubernetes cluster
  ```
  apt update && apt install curl -y
  curl -X GET http://dojo-1.sample
-
  ```
 
 You can change the string in the `content` field in the `dojo.yaml` manifest and every time it is applied it should be changed in the python service as well.
