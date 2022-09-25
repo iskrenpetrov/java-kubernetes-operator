@@ -12,6 +12,6 @@ cd manifests
 kubectl apply -f dojo-crd.yaml
 kubectl apply -f operator.yaml
 kubectl apply -f dojo.yaml
-kubectl exec -it $(kubectl get pods -n sample -o name | grep pod/operator-deployment-) -n sample /bin/bash
-apt update && apt install curl -y
-curl http://dojo-1.sample
+# kubectl exec -it $(kubectl get pods -n sample -o name | grep pod/operator-deployment-) -n sample /bin/bash
+# apt update && apt install curl -y
+# curl http://dojo-1.sample
