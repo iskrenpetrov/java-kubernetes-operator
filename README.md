@@ -1,3 +1,6 @@
+## What does the operator do?
+Kubernetes operator written in Java. The idea of the operator is when you apply crd and deployment, the operator create a deployment that includes python services with two rest apis(get request to receive current string and put request to edit the existing string), when you apply custom resources a new event is registered and for each minute, put request will be called to keep the string in the desired state from custom resources. Every time you apply new custom resources the operator will check if there is a existing python service and if there is no available deployment with the python application, it will create a new one.
+
 ## Prerequisites
 
 * Python 3 (and pip)
