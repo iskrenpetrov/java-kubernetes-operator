@@ -1,0 +1,7 @@
+apiVersion: sample.operator.com/v1
+kind: Dojo
+metadata:
+  name: dojo-1
+  namespace: sample
+spec:
+  content: new-desired-state

@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-service
+spec:
+  selector:
+    matchLabels:
+      app: python-service
+  template:
+    metadata:
+      labels:
+        app: python-service
+    spec:
+      containers:
+      - name: python-service
+        image: python-service:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: python-endpoint
+spec:
+  selector:
+    app: python-service
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 5000

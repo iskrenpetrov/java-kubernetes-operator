@@ -1,0 +1,94 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sample
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: dojo-operator
+  namespace: sample
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: dojo-operator-admin
+  namespace: sample
+subjects:
+  - kind: ServiceAccount
+    name: dojo-operator
+    namespace: sample
+roleRef:
+  kind: ClusterRole
+  name: dojo-operator
+  apiGroup: ""
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: dojo-operator
+  namespace: sample
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - deployments
+      - pods
+      - services
+    verbs:
+      - '*'
+  - apiGroups:
+      - "apps"
+      - "extensions"
+    resources:
+      - deployments
+      - pods
+      - events
+      - services
+    verbs:
+      - '*'
+  - apiGroups:
+      - "apiextensions.k8s.io"
+    resources:
+      - customresourcedefinitions
+    verbs:
+      - '*'
+  - apiGroups:
+      - "sample.operator.com"
+    resources:
+      - dojos
+      - dojos/status
+    verbs:
+      - '*'
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: operator-deployment
+  namespace: sample
+spec:
+  selector:
+    matchLabels:
+      app: dojo
+  template:
+    metadata:
+      labels:
+        app: dojo
+    spec:
+      containers:
+        - name: operator
+          image: dojo-operator
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+            - containerPort: 5005
+          env:
+            - name: "JAVA_DEBUG"
+              value: "true"
+            - name: "JAVA_TOOL_OPTIONS"
+              value: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+      serviceAccountName: dojo-operator
